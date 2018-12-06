@@ -21,7 +21,7 @@ node {
         sh "cat staging/app-dev.env > app.env"
         // then the stage app stuff
         // stage is hard coded, not best practice
-        sh "cat staging/app-pp.env >> app.env"
+        sh "cat explotatie/app-pp.env >> app.env"
 
         // now we have the env vars adjusted for current stage
         // we could create the DC with template now
