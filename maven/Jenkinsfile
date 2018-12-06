@@ -2,7 +2,8 @@
 
 node {
     stage('git checkout') {
-        git 'https://github.com/buuhsmead/ocp-demo-cicd.git'
+      //  git 'https://github.com/buuhsmead/ocp-demo-cicd.git'
+        checkout scm
         sh "ls -la"
     }
 
