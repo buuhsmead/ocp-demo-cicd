@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+
+
+  <!-- Define a traditional camel context here -->
+  <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+
+    <restConfiguration bindingMode="json"
+                       component="servlet" contextPath="/rest">
+      <componentProperty key="foo" value="123" />
+    </restConfiguration>
+
+    <rest path="/service" id="rest-main" >
+      <get uri="/customers" id="rest-customers" >
+        <to uri="direct:inbox" />
+      </get>
+    </rest>
+
+
+    <route id="simple-route">
+      <from id="route-timer" uri="timer:foo?period=2000"/>
+      <transform id="route-transform">
+        <method ref="myTransformer"/>
+      </transform>
+      <log id="route-log" message=">>> ${body}"/>
+    </route>
+
+    <route id="simple-rest">
+      <from  uri="direct:inbox" id="rest-route-inbox"/>
+      <transform>
+        <simple>"HEADERS ${headers}"</simple>
+      </transform>
+    </route>
+
+  </camelContext>
+
+</beans>
+
+

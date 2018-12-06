@@ -1,0 +1,17 @@
+
+metadata:
+  labels:
+    expose: 'true'
+    promotion-group: "ocp-demo-cicd"
+  name: ocp-demo-cicd
+spec:
+  port:
+    targetPort: http
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: ocp-demo-cicd
+    weight: 100
+  wildcardPolicy: None

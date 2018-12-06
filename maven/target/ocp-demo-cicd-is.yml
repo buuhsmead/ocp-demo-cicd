@@ -1,0 +1,15 @@
+---
+apiVersion: "v1"
+kind: "List"
+items:
+- apiVersion: "v1"
+  kind: "ImageStream"
+  metadata:
+    name: "ocp-demo-cicd"
+  spec:
+    tags:
+    - from:
+        kind: "ImageStreamImage"
+        name: "ocp-demo-cicd@sha256:8a09010b8f00722477343c66caf622071f7c558e086c4e0c6eee8eaa1e5bc768"
+        namespace: "myproject"
+      name: "latest"

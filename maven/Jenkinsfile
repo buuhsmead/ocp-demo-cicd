@@ -1,0 +1,16 @@
+#!/usr/bin/env groovy
+
+node {
+    stage('git checkout') {
+        git 'https://github.com/buuhsmead/ocp-demo-cicd.git'
+        sh "ls -la"
+    }
+
+    stage('maven stuff') {
+        dir('maven') {
+            echo "inside the maven sub dir of our project."
+            sh "ls -la"
+        }
+    }
+}
+
