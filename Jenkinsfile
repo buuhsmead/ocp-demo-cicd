@@ -29,8 +29,10 @@ node {
     }
     stage('create in a project the app') {
         // get and push the image to the right namespace
-        openshift.newProject("d2", "--display-name", "d2")
-        openshift.withProject() {
+
+        // create the project, if not exists
+        // openshift.newProject("d2", "--display-name", "d2")
+        openshift.withProject("d2") {
             sh "oc create -f app.yaml"
         }
 
