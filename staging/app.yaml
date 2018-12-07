@@ -184,4 +184,14 @@ parameters:
     displayName: Source Repository URL
     description: The URL of the repository with your application source code
     value: http://verkeerd.example.com
+  - name: database.user
+    value: user
+  - name: database.password
+    value: pw
+  - name: database_host
+    value: verkeerd.example.com
+  - name: database.port
+    value: 800
+  - name: stage
+    value: na
 
