@@ -1,0 +1,179 @@
+apiVersion: v1
+items:
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      fabric8.io/git-branch: master
+      fabric8.io/git-commit: b1eddb7692ab30ca28366a863f52db2072a4d559
+      fabric8.io/iconUrl: img/icons/camel.svg
+      fabric8.io/metrics-path: dashboard/file/camel-routes.json/?var-project=ocp-demo-cicd&var-version=0.1.0-SNAPSHOT
+    creationTimestamp: 2018-12-07T01:54:13Z
+    generation: 2
+    labels:
+      expose: "true"
+      group: com.github.buuhsmead
+      project: ocp-demo-cicd
+      promotion-group: ocp-demo-cicd
+      provider: fabric8
+      version: 0.1.0-SNAPSHOT
+    name: ocp-demo-cicd
+  spec:
+    replicas: 1
+    selector:
+      group: com.github.buuhsmead
+      project: ocp-demo-cicd
+      provider: fabric8
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 10800
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-branch: master
+          fabric8.io/git-commit: b1eddb7692ab30ca28366a863f52db2072a4d559
+          fabric8.io/iconUrl: img/icons/camel.svg
+          fabric8.io/metrics-path: dashboard/file/camel-routes.json/?var-project=ocp-demo-cicd&var-version=0.1.0-SNAPSHOT
+        creationTimestamp: null
+        labels:
+          group: com.github.buuhsmead
+          project: ocp-demo-cicd
+          provider: fabric8
+          version: 0.1.0-SNAPSHOT
+      spec:
+        containers:
+        - env:
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: JAVA_APP_DIR
+            value: /deployments
+          image: 172.30.1.1:5000/myproject/ocp-demo-cicd@sha256:20f5ed48ad712636d85e9884af04fb848bb20b1e7c373f327e63c33bdaa11fdd
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8081
+              scheme: HTTP
+            initialDelaySeconds: 180
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: spring-boot
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          - containerPort: 9779
+            name: prometheus
+            protocol: TCP
+          - containerPort: 8778
+            name: jolokia
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8081
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+          securityContext:
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - spring-boot
+        from:
+          kind: ImageStreamTag
+          name: ocp-demo-cicd:latest
+        lastTriggeredImage: 172.30.1.1:5000/myproject/ocp-demo-cicd@sha256:20f5ed48ad712636d85e9884af04fb848bb20b1e7c373f327e63c33bdaa11fdd
+      type: ImageChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-branch: master
+      fabric8.io/git-commit: b1eddb7692ab30ca28366a863f52db2072a4d559
+      fabric8.io/iconUrl: img/icons/camel.svg
+    creationTimestamp: 2018-12-07T01:54:12Z
+    labels:
+      expose: "true"
+      group: com.github.buuhsmead
+      project: ocp-demo-cicd
+      promotion-group: ocp-demo-cicd
+      provider: fabric8
+      version: 0.1.0-SNAPSHOT
+    name: ocp-demo-cicd
+  spec:
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      group: com.github.buuhsmead
+      project: ocp-demo-cicd
+      provider: fabric8
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    creationTimestamp: 2018-12-07T01:54:14Z
+    labels:
+      expose: "true"
+      group: com.github.buuhsmead
+      project: ocp-demo-cicd
+      promotion-group: ocp-demo-cicd
+      provider: fabric8
+      version: 0.1.0-SNAPSHOT
+    name: ocp-demo-cicd
+  spec:
+    port:
+      targetPort: http
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: ocp-demo-cicd
+      weight: 100
+    wildcardPolicy: None
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

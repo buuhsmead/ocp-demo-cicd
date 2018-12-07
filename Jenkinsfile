@@ -27,4 +27,9 @@ node {
         // we could create the DC with template now
         sh "cat app.env | oc process -f staging/app.yaml --param-file=- > app.yaml"
     }
+    stage('create in a project the app') {
+        // get and push the image to the right namespace
+        sh "oc create -f app.yaml -n d2 --namespace=d2"
+    }
+
 }
