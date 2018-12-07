@@ -1,5 +1,11 @@
+
+kind: Template
 apiVersion: v1
-items:
+metadata:
+  name: app
+objects:
+
+
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   metadata:
@@ -173,7 +179,9 @@ items:
       name: ocp-demo-cicd
       weight: 100
     wildcardPolicy: None
-kind: List
-metadata:
-  resourceVersion: ""
-  selfLink: ""
+parameters:
+  - name: DUMMY_PARM_NAME_URL
+    displayName: Source Repository URL
+    description: The URL of the repository with your application source code
+    value: http://verkeerd.example.com
+
