@@ -25,6 +25,6 @@ node {
 
         // now we have the env vars adjusted for current stage
         // we could create the DC with template now
-        sh "cat app.env"
+        sh "cat app.env | oc process -f staging/app.yaml --param-file=- > app.yaml"
     }
 }

@@ -11,6 +11,7 @@ node {
         dir('maven') {
             echo "inside the maven sub dir of our project."
             sh "ls -la"
+            echo "Using S2I source so image is already build."
         }
     }
 }
