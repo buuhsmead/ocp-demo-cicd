@@ -29,7 +29,16 @@ node {
     }
     stage('create in a project the app') {
         // get and push the image to the right namespace
-        sh "oc create -f app.yaml -n d2 --namespace=d2"
+        openshift.newProject("d2", "--display-name", "d2")
+        openshift.withProject() {
+            sh "oc create -f app.yaml"
+        }
+
     }
 
 }
+
+//+ oc create -f app.yaml -n d2 --namespace=d2
+//Error from server (Forbidden): deploymentconfigs.apps.openshift.io is forbidden: User "system:serviceaccount:demo-jenkins:jenkins" cannot create deploymentconfigs.apps.openshift.io in the namespace "d2": no RBAC policy matched
+//Error from server (Forbidden): services is forbidden: User "system:serviceaccount:demo-jenkins:jenkins" cannot create services in the namespace "d2": no RBAC policy matched
+//Error from server (Forbidden): routes.route.openshift.io is forbidden: User "system:serviceaccount:demo-jenkins:jenkins" cannot create routes.route.openshift.io in the namespace "d2": no RBAC policy matched
