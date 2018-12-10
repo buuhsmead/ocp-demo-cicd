@@ -32,9 +32,9 @@ node {
 
         // create the project, if not exists
         // openshift.newProject("d2", "--display-name", "d2")
-        openshift.withProject("d2") {
-            sh "oc create -f app.yaml"
-        }
+
+            sh "oc create -f app.yaml -n d2"
+
 
     }
 
